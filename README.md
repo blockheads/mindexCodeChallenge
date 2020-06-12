@@ -2,6 +2,8 @@
 
 This is my attempt at completing a coding challenge sent to me from Mindex... Here was the original ReadMe.MD
 
+I added the desired features and some simple tests within the provided ChallengeApplicationTests.
+
 ## What's Provided
 A simple [Spring Boot](https://projects.spring.io/spring-boot/) web application has been created and bootstrapped 
 with data. The application contains information about all employees at a company. On application start-up, an in-memory 
