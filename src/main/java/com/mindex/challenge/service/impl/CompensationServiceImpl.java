@@ -23,8 +23,11 @@ public class CompensationServiceImpl implements CompensationService {
     public Compensation create(Compensation compensation) {
         LOG.debug("Creating Compensation [{}]", compensation);
 
+        // error handling non unique creation. could throw exception..
+        if(compensation.getEmployee() == null || compensationRepository.findByEmployee_EmployeeId(compensation.getEmployee().getEmployeeId()) != null)
+            return null;
+
         compensationRepository.insert(compensation);
-        System.out.println("inserted: " + compensation);
         return compensation;
     }
 
@@ -32,7 +35,7 @@ public class CompensationServiceImpl implements CompensationService {
     public Compensation read(Employee employee) {
         LOG.debug("Creating Compensation with employee [{}]", employee);
 
-        Compensation compensation = compensationRepository.findByEmployee(employee);
+        Compensation compensation = compensationRepository.findByEmployee_EmployeeId(employee.getEmployeeId());
 
         if (compensation == null) {
             throw new RuntimeException("Invalid Employee: " + employee);

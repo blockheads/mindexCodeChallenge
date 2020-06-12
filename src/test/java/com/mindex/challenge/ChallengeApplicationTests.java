@@ -30,6 +30,7 @@ public class ChallengeApplicationTests {
 	private String employeeUrl;
 	private String structureIdUrl;
 	private String compensationUrl;
+	private String compensationIdUrl;
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -48,6 +49,7 @@ public class ChallengeApplicationTests {
 		employeeUrl = "http://localhost:" + port + "/employee";
 		structureIdUrl =  "http://localhost:" + port + "/reportingStructure/{id}";
 		compensationUrl = "http://localhost:" + port + "/compensation";
+		compensationIdUrl = "http://localhost:" + port + "/compensation/{id}";
 	}
 
 	@Test
@@ -82,9 +84,16 @@ public class ChallengeApplicationTests {
 
 		// Create checks
 		Compensation createdCompensation = restTemplate.postForEntity(compensationUrl, compensation, Compensation.class).getBody();
-		System.out.println(restTemplate.postForEntity(compensationUrl, compensation, Compensation.class));
+		// checking if this breaks unique creation for Compensation..
+		restTemplate.postForEntity(compensationUrl, compensation, Compensation.class);
 		assertNotNull(createdCompensation);
 		assertCompensation(compensation, createdCompensation);
+
+		// read checks
+		Compensation readCompensation = restTemplate.getForEntity(compensationIdUrl, Compensation.class, compensation.getEmployee().getEmployeeId()).getBody();
+		assertNotNull(readCompensation);
+		assertCompensation(compensation, readCompensation);
+
 
 	}
 
