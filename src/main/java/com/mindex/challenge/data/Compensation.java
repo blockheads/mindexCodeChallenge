@@ -8,7 +8,7 @@ public class Compensation {
      *  employee, salary, and effectiveDate.
      */
     private Employee employee;
-    private int salary;
+    private Integer salary;
     private Date effectiveDate;
 
     public Compensation(){
@@ -23,11 +23,11 @@ public class Compensation {
         this.employee = employee;
     }
 
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 

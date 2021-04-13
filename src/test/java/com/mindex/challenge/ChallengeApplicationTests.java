@@ -5,6 +5,7 @@ import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.data.ReportingStructure;
+import com.mindex.challenge.data.ReportingStructureTest;
 import com.mindex.challenge.service.EmployeeService;
 import com.mindex.challenge.service.impl.EmployeeServiceImplTest;
 import org.junit.Assert;
@@ -27,81 +28,12 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ChallengeApplicationTests {
 
-	private String employeeUrl;
-	private String structureIdUrl;
-	private String compensationUrl;
-	private String compensationIdUrl;
-
-	@Autowired
-	private EmployeeRepository employeeRepository;
-
-	@Autowired
-	private CompensationRepository compensationRepository;
-
-	@LocalServerPort
-	private int port;
-
-	@Autowired
-	private TestRestTemplate restTemplate;
-
-	@Before
-	public void setup() {
-		employeeUrl = "http://localhost:" + port + "/employee";
-		structureIdUrl =  "http://localhost:" + port + "/reportingStructure/{id}";
-		compensationUrl = "http://localhost:" + port + "/compensation";
-		compensationIdUrl = "http://localhost:" + port + "/compensation/{id}";
-	}
 
 	@Test
 	public void contextLoads() {
-	}
-
-	@Test
-	public void Task1(){
-
-		Employee employee = employeeRepository.findByEmployeeId("16a596ae-edd3-4847-99fe-c4518e82c86f");
-
-		// now let's get back a ReportingStructure
-		ReportingStructure reportingStructure =  restTemplate.getForEntity(structureIdUrl, ReportingStructure.class, employee.getEmployeeId()).getBody();
-
-		// now get reports
-		assertEquals(4, reportingStructure.calculateReports(employeeRepository));
-
 
 	}
 
-	@Test
-	public void Task2(){
-
-		// getting our employee's compensation
-		Employee employee = employeeRepository.findByEmployeeId("16a596ae-edd3-4847-99fe-c4518e82c86f");
-
-		// let us create a compensation for our employee
-		Compensation compensation = new Compensation();
-		compensation.setEmployee(employee);
-		compensation.setSalary(10000);
-		compensation.setEffectiveDate(new Date(1000));
-
-		// Create checks
-		Compensation createdCompensation = restTemplate.postForEntity(compensationUrl, compensation, Compensation.class).getBody();
-		// checking if this breaks unique creation for Compensation..
-		restTemplate.postForEntity(compensationUrl, compensation, Compensation.class);
-		assertNotNull(createdCompensation);
-		assertCompensation(compensation, createdCompensation);
-
-		// read checks
-		Compensation readCompensation = restTemplate.getForEntity(compensationIdUrl, Compensation.class, compensation.getEmployee().getEmployeeId()).getBody();
-		assertNotNull(readCompensation);
-		assertCompensation(compensation, readCompensation);
-
-
-	}
-
-	public static void assertCompensation(Compensation compensation1, Compensation compensation2){
-		assertEquals(compensation1.getEffectiveDate(), compensation2.getEffectiveDate());
-		EmployeeServiceImplTest.assertEmployeeEquivalence(compensation1.getEmployee(), compensation2.getEmployee());
-		assertEquals(compensation1.getSalary(), compensation2.getSalary());
-	}
 
 
 }
