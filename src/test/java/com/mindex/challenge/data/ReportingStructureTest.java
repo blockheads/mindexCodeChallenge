@@ -51,15 +51,18 @@ public class ReportingStructureTest {
         // now let's get back a ReportingStructure
         ReportingStructure johnStructure =  restTemplate.getForEntity(structureIdUrl, ReportingStructure.class, john.getEmployeeId()).getBody();
         // now get reports
-        assertEquals(4, johnStructure.calculateReports(employeeRepository));
+        assert johnStructure != null;
+        assertEquals(Integer.valueOf(4), johnStructure.getNumberOfReports(employeeRepository));
 
         // now let's get back a ReportingStructure
         ReportingStructure paulStructure =  restTemplate.getForEntity(structureIdUrl, ReportingStructure.class, PAUL_MCARTNEY_ID).getBody();
-        assertEquals(0, paulStructure.calculateReports(employeeRepository));
+        assert paulStructure != null;
+        assertEquals(Integer.valueOf(0), paulStructure.getNumberOfReports(employeeRepository));
 
 
         ReportingStructure ringoStructure =  restTemplate.getForEntity(structureIdUrl, ReportingStructure.class, RINGO_STARR_ID).getBody();
-        assertEquals(2, ringoStructure.calculateReports(employeeRepository));
+        assert ringoStructure != null;
+        assertEquals(Integer.valueOf(2), ringoStructure.getNumberOfReports(employeeRepository));
 
 
         // testing a new employee
@@ -74,7 +77,7 @@ public class ReportingStructureTest {
         Employee createdEmployee = restTemplate.postForEntity(employeeUrl, testEmployee, Employee.class).getBody();
         assertNotNull(createdEmployee);
         ReportingStructure createdEmployeeReportingStructure =  restTemplate.getForEntity(structureIdUrl, ReportingStructure.class, createdEmployee.getEmployeeId()).getBody();
-        System.out.println("created employee: " + createdEmployeeReportingStructure.calculateReports(employeeRepository));
+        //System.out.println("created employee: " + createdEmployeeReportingStructure.calculateReports(employeeRepository));
 
     }
 }

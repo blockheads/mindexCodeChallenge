@@ -1,7 +1,6 @@
 package com.mindex.challenge.data;
 
 import com.mindex.challenge.dao.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -10,6 +9,7 @@ public class ReportingStructure{
 
     // employee
     private Employee employee;
+    private Integer numberOfReports;
 
     public ReportingStructure(){
     }
@@ -23,9 +23,13 @@ public class ReportingStructure{
     // getting number of reports
     // returns -1 if no employee set with
     // this structure
-    public int calculateReports(EmployeeRepository employeeRepository){
-        Set<Employee> visited = new HashSet<>();
-        return this.getReportsHelper(this.employee, visited, employeeRepository);
+    public Integer getNumberOfReports(EmployeeRepository employeeRepository){
+        if(this.numberOfReports == null){
+            Set<Employee> visited = new HashSet<>();
+            this.numberOfReports = this.getReportsHelper(this.employee, visited, employeeRepository);
+        }
+        return this.numberOfReports;
+
     }
 
 
